@@ -568,6 +568,7 @@ class EmulationActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTo
         stopEmulation(false)
         vibrators.forEach { (_, vibrator) -> vibrator.cancel() }
         vibrators.clear()
+        unregisterUsbEventListener()
     }
 
     private lateinit var pipelineLoadingFragment : PipelineLoadingFragment
