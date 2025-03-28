@@ -43,6 +43,8 @@ import javax.inject.Inject
 import kotlin.math.ceil
 import com.google.android.material.R as MaterialR
 
+private const val ACTION_USB_PERMISSION = "org.stratoemu.strato.USB_PERMISSION"
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -89,7 +91,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun AppItem.toViewItem() = AppViewItem(layoutType, this, ::selectStartGame, ::selectShowGameDialog)
-
+    private lateinit var unregisterUsbEventListener: () -> Unit
+    
     override fun onCreate(savedInstanceState : Bundle?) {
         // Need to create new instance of settings, dependency injection happens
         AppCompatDelegate.setDefaultNightMode(
@@ -152,6 +155,7 @@ class MainActivity : AppCompatActivity() {
         window.decorView.findViewById<View>(android.R.id.content).viewTreeObserver.addOnTouchModeChangeListener { isInTouchMode ->
             refreshIconVisible = !isInTouchMode
         }
+        unregisterUsbEventListener = listenUsbEvents(this)
     }
 
     private fun setAppListDecoration() {
